@@ -1,5 +1,5 @@
 rules:
-  - id: nostr.nip-44.missing-version-check-rust
+  - id: missing-version-check-rust
     languages: [rust]
     severity: ERROR
     message: |
@@ -112,7 +112,7 @@ rules:
               ...
           }
 
-  - id: nostr.nip-44.missing-version-check-ts
+  - id: missing-version-check-ts
     languages: [typescript, javascript]
     severity: ERROR
     message: |

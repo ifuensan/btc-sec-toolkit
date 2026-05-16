@@ -1,4 +1,4 @@
-// Fixtures for nostr.nip-44.missing-version-check-ts
+// Fixtures for missing-version-check-ts
 // Run: semgrep --test rules/nostr/nip-44/
 
 import { base64 } from "@scure/base";
@@ -6,7 +6,7 @@ import { base64 } from "@scure/base";
 // BAD: slices past the version byte without checking it.
 function nip44DecryptBad(payload: string): Uint8Array {
   const bytes = base64.decode(payload);
-  // ruleid: nostr.nip-44.missing-version-check-ts
+  // ruleid: missing-version-check-ts
   const nonce = bytes.slice(1, 33);
   const ciphertext = bytes.slice(33, bytes.length - 32);
   void nonce;
@@ -19,7 +19,7 @@ function nip44DecryptGood(payload: string): Uint8Array {
   if (bytes[0] !== 0x02) {
     throw new Error(`unsupported NIP-44 version: ${bytes[0]}`);
   }
-  // ok: nostr.nip-44.missing-version-check-ts
+  // ok: missing-version-check-ts
   const nonce = bytes.slice(1, 33);
   return nonce;
 }
@@ -28,7 +28,7 @@ function nip44DecryptGood(payload: string): Uint8Array {
 // byte 0 without checking — even with a generic name.
 function decodePayload(payload: string): Uint8Array {
   const bytes = base64.decode(payload);
-  // ruleid: nostr.nip-44.missing-version-check-ts
+  // ruleid: missing-version-check-ts
   const body = bytes.slice(1);
   return body;
 }
@@ -40,7 +40,7 @@ function nip44DecodeAliased(payload: string): Uint8Array {
   if (vers !== 2) {
     throw new Error("unknown encryption version " + vers);
   }
-  // ok: nostr.nip-44.missing-version-check-ts
+  // ok: missing-version-check-ts
   const nonce = bytes.slice(1, 33);
   return nonce;
 }
@@ -49,7 +49,7 @@ function nip44DecodeAliased(payload: string): Uint8Array {
 // (Example: ECDH shared-secret extraction in getConversationKey style.)
 function getConversationKey(secret: Uint8Array): Uint8Array {
   const sharedPoint = secret;
-  // ok: nostr.nip-44.missing-version-check-ts
+  // ok: missing-version-check-ts
   const xCoord = sharedPoint.subarray(1, 33);
   return xCoord;
 }
