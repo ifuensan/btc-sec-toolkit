@@ -1,0 +1,33 @@
+# BMad outputs (generated artifacts)
+_bmad-output/
+
+# BMad personal overrides (per-user, never committed)
+_bmad/custom/config.user.toml
+_bmad/custom/*.user.toml
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python (in case any skill or script generates artifacts)
+__pycache__/
+*.pyc
+*.pyo
+
+# Node (in case)
+node_modules/
+
+# Rust (when code lands)
+target/
+Cargo.lock.bak
+
+# Local env
+.env
+.env.local
