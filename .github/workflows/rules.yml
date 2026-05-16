@@ -1,0 +1,23 @@
+name: rules
+
+on:
+  pull_request:
+    paths:
+      - "rules/**"
+      - ".github/workflows/rules.yml"
+  push:
+    branches: [main]
+    paths:
+      - "rules/**"
+      - ".github/workflows/rules.yml"
+
+jobs:
+  semgrep-test:
+    name: semgrep --test
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run rule fixture tests
+        run: semgrep --test rules/

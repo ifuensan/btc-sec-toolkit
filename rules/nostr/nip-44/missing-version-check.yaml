@@ -1,0 +1,263 @@
+rules:
+  - id: nostr.nip-44.missing-version-check-rust
+    languages: [rust]
+    severity: ERROR
+    message: |
+      Possible NIP-44 ciphertext decoded without validating the version byte at offset 0.
+
+      Per NIP-44 spec (https://github.com/nostr-protocol/nips/blob/master/44.md), a
+      decoder MUST reject unsupported version bytes. Slicing the payload starting at
+      offset 1 without first comparing offset 0 against the supported version constant
+      (0x02 for v2) leaves the implementation open to:
+
+        - Future-version downgrade confusion (e.g. v3 ciphertext silently misparsed as v2).
+        - Malformed-input misparsing (offsets shift, MAC verification path hides the bug).
+
+      Fix: validate `bytes[0]` (or `.first()`) against the supported version constant
+      before slicing. Prefer the canonical `nostr-sdk` NIP-44 helpers, which handle
+      version validation internally.
+    metadata:
+      category: security
+      cwe:
+        - "CWE-757: Selection of Less-Secure Algorithm During Negotiation"
+      references:
+        - https://github.com/nostr-protocol/nips/blob/master/44.md
+        - https://github.com/nostr-protocol/nips/blob/master/17.md
+      technology:
+        - nostr
+      subcategory:
+        - audit
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: HIGH
+    paths:
+      include:
+        - "**/nip44*"
+        - "**/nip44/**"
+        - "**/nip-44*"
+        - "**/nip-44/**"
+        - "**/nip_44*"
+        - "**/nip_44/**"
+    patterns:
+      - pattern-either:
+          - pattern: "&$BYTES[1..$N]"
+          - pattern: "$BYTES[1..$N]"
+          - pattern: "&$BYTES[1..]"
+          - pattern: "$BYTES[1..]"
+          - pattern: "$BYTES.get(1..$N)"
+          - pattern: "$BYTES.get(1..)"
+      - pattern-inside: |
+          fn $FN(...) {
+              ...
+          }
+      - metavariable-regex:
+          metavariable: $FN
+          regex: "(?i).*(decrypt|decode|parse|unwrap).*"
+      - pattern-not-inside: |
+          fn $FN(...) {
+              ...
+              if $BYTES[0] != $V {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          fn $FN(...) {
+              ...
+              if $BYTES[0] == $V {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          fn $FN(...) {
+              ...
+              if $BYTES.first() != $V {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          fn $FN(...) {
+              ...
+              if $BYTES.first() == $V {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          fn $FN(...) {
+              ...
+              assert_eq!($BYTES[0], $V);
+              ...
+          }
+      - pattern-not-inside: |
+          fn $FN(...) {
+              ...
+              let $X = $BYTES[0];
+              ...
+              if $X != $V {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          fn $FN(...) {
+              ...
+              let $X = $BYTES[0];
+              ...
+              if $X == $V {
+                  ...
+              }
+              ...
+          }
+
+  - id: nostr.nip-44.missing-version-check-ts
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: |
+      Possible NIP-44 ciphertext decoded without validating the version byte at offset 0.
+
+      Per NIP-44 spec (https://github.com/nostr-protocol/nips/blob/master/44.md), a
+      decoder MUST reject unsupported version bytes. Slicing the payload starting at
+      offset 1 without first comparing offset 0 against the supported version constant
+      (0x02 for v2) leaves the implementation open to:
+
+        - Future-version downgrade confusion (e.g. v3 ciphertext silently misparsed as v2).
+        - Malformed-input misparsing (offsets shift, MAC verification path hides the bug).
+
+      Fix: validate `bytes[0]` against the supported version constant before slicing.
+      Prefer the canonical `nostr-tools` / `@noble` NIP-44 helpers, which handle
+      version validation internally.
+    metadata:
+      category: security
+      cwe:
+        - "CWE-757: Selection of Less-Secure Algorithm During Negotiation"
+      references:
+        - https://github.com/nostr-protocol/nips/blob/master/44.md
+        - https://github.com/nostr-protocol/nips/blob/master/17.md
+      technology:
+        - nostr
+      subcategory:
+        - audit
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: HIGH
+    paths:
+      include:
+        - "**/nip44*"
+        - "**/nip44/**"
+        - "**/nip-44*"
+        - "**/nip-44/**"
+        - "**/nip_44*"
+        - "**/nip_44/**"
+      exclude:
+        - "**/*.test.ts"
+        - "**/*.test.js"
+        - "**/*.spec.ts"
+        - "**/*.spec.js"
+    patterns:
+      - pattern-either:
+          - pattern: "$BYTES.slice(1, ...)"
+          - pattern: "$BYTES.slice(1)"
+          - pattern: "$BYTES.subarray(1, ...)"
+          - pattern: "$BYTES.subarray(1)"
+      - pattern-inside: |
+          function $FN(...) {
+              ...
+          }
+      - metavariable-regex:
+          metavariable: $FN
+          regex: "(?i).*(decrypt|decode|parse|unwrap).*"
+      - pattern-not-inside: |
+          function $FN(...) {
+              ...
+              if ($BYTES[0] !== $V) {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          function $FN(...) {
+              ...
+              if ($BYTES[0] === $V) {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          function $FN(...) {
+              ...
+              if ($BYTES[0] != $V) {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          function $FN(...) {
+              ...
+              if ($BYTES[0] == $V) {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          function $FN(...) {
+              ...
+              const $X = $BYTES[0];
+              ...
+              if ($X !== $V) {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          function $FN(...) {
+              ...
+              const $X = $BYTES[0];
+              ...
+              if ($X === $V) {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          function $FN(...) {
+              ...
+              const $X = $BYTES[0];
+              ...
+              if ($X != $V) {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          function $FN(...) {
+              ...
+              const $X = $BYTES[0];
+              ...
+              if ($X == $V) {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          function $FN(...) {
+              ...
+              let $X = $BYTES[0];
+              ...
+              if ($X !== $V) {
+                  ...
+              }
+              ...
+          }
+      - pattern-not-inside: |
+          function $FN(...) {
+              ...
+              let $X = $BYTES[0];
+              ...
+              if ($X === $V) {
+                  ...
+              }
+              ...
+          }
