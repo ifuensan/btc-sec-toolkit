@@ -97,4 +97,4 @@ Run against canonical NIP-44 implementations:
 
 ## Provenance
 
-This rule is item **#231 / #232 / #233** (NIP-44 cripto bugs cluster) in the failure-modes catalog at [`_bmad-output/brainstorming/brainstorming-session-2026-05-16-1316.md`](../../../_bmad-output/brainstorming/brainstorming-session-2026-05-16-1316.md). First implementation: 2026-05-16.
+This rule is item **#231 / #232 / #233** (NIP-44 cripto bugs cluster) in the local failure-modes catalog (255 candidates) referenced in the project's [PRFAQ](../../../docs/prfaq.md). The full catalog is a working artifact under `_bmad-output/` (not tracked). First implementation: 2026-05-16.

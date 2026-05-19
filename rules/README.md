@@ -2,7 +2,7 @@
 
 Semgrep rules for security failure modes specific to the Bitcoin / Lightning / Cashu / Nostr ecosystem.
 
-Companion to the parent project. For project rationale, scope, and ruled-out branches see [`docs/project-context.md`](../docs/project-context.md). For the prioritized backlog of failure modes (255 candidates, 17 Tier-1) see [`_bmad-output/brainstorming/`](../_bmad-output/brainstorming/).
+Companion to the parent project. For project rationale, scope, and ruled-out branches see [`docs/project-context.md`](../docs/project-context.md). For the strategic plan, customer + internal FAQ, and the verdict on the alpha see [`docs/prfaq.md`](../docs/prfaq.md). The full 255-failure-modes catalog and AOS preparation artifacts live locally under `_bmad-output/` (not tracked).
 
 ## Layout
 
