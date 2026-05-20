@@ -2,7 +2,8 @@
 
 | | |
 |---|---|
-| **Severity** | ERROR |
+| **Version** | v1.1 |
+| **Severity** | ERROR (planned downgrade to `WARNING` in v1.2 — see PRFAQ Q6 fast-follow) |
 | **Languages** | Rust, TypeScript / JavaScript |
 | **Category** | security · audit |
 | **Confidence / Likelihood / Impact** | MEDIUM / MEDIUM / HIGH |
@@ -77,7 +78,7 @@ Suppression heuristics (the rule does NOT fire if the enclosing function contain
 - **`.first()` alias-then-check not recognized.** The pattern `let v = *bytes.first()?; if v != 2 { ... }` (used in `rust-nostr::impl::decrypt_to_bytes`) does not currently suppress, due to Semgrep Rust parser issues with `*foo()?` syntax in metavariable position. To be addressed in v1.2.
 - **Per-language rule split.** AST patterns diverge enough between Rust and TypeScript that the rule is split into `-rust` and `-ts` variants in the same YAML. Conceptually one rule.
 
-## Smoke test results (2026-05-16)
+## Smoke test results (2026-05-17, v1.1)
 
 Run against canonical NIP-44 implementations:
 

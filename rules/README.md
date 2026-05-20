@@ -30,7 +30,7 @@ semgrep --test rules/
 
 | Rule ID | Layer | Severity | Languages | Status |
 |---|---|---|---|---|
-| `nostr.nip-44.missing-version-check` | Nostr | ERROR | Rust, TypeScript / JavaScript | v1 |
+| `nostr.nip-44.missing-version-check` | Nostr | ERROR | Rust, TypeScript / JavaScript | v1.1 |
 
 ## Conventions
 
