@@ -6,7 +6,7 @@ created: "2026-05-17"
 purpose: "Token-efficient context for downstream PRD creation or closure retrospective"
 verdict: "needs-heat"
 key_risks:
-  - "I10 commit/close decision deferred to 2026-06-01 (2-week cooldown test)"
+  - "I10 commit/close decision deferred to post-And-Other-Stuff (~2026-05-28); the original 2026-06-01 cooldown was cancelled on 2026-05-18 in favor of adversarial validation at the conference"
   - "I3 maintainer outreach unstarted (placeholder names only); launch blocker"
   - "Q5 peer reviewers unnamed; launch blocker (no alpha publicization without CODEOWNERS for rule directories)"
   - "Loupe (tnull) may absorb the high-value patterns into the LLM scanner within 6 months, evaporating differential value. Tnull also maintains bkb-mcp, natural position to layer Bitcoin context into Loupe."
@@ -15,17 +15,17 @@ key_risks:
   - "TAM brutally small (low hundreds globally) — recognition work, not product"
 open_questions:
   - "Will any of the 5 placeholder integration targets (Mostro, Whitenoise, cdk, rust-nostr, LDK) actually be receptive?"
-  - "Will tnull (Loupe + bkb-mcp maintainer) coordinate, absorb, or compete on the rule patterns? (Decision blocked until post-cooldown commit)"
+  - "Will tnull (Loupe + bkb-mcp maintainer) coordinate, absorb, or compete on the rule patterns? Decision blocked until post-And-Other-Stuff commit"
   - "Does MCP show enough value-add to justify investment? (3-month post-ship evaluation; pre-emptive drop from alpha scope strongly recommended)"
   - "Are C/Swift wallet teams reachable as a wave-2 audience, or does the project effectively never reach them?"
-  - "Will the alias-then-check Rust suppression pattern (currently broken due to `*$BYTES.first()$T` parser limitation) be fixable in Semgrep, or does it require a v1.2 dataflow rewrite?"
+  - "Will the alpha rule #2 anchor land on NUT-13 (Deterministic Secrets), NUT-02 (Keysets and keyset_id), or an intersection? Pending verification via bkb_lookup_nut(2) + conduition.io re-read before implementation"
 ---
 
 # PRFAQ Distillate — btc-sec-toolkit
 
 ## Concept summary
 
-Open-source Semgrep rule pack covering protocol-conformance failure modes for the Bitcoin / Lightning / Cashu / Nostr ecosystem (BIPs, BOLTs, NIPs, NUTs, LUDs). Companion MCP spec-context server is on the roadmap but **recommended for drop-from-alpha** per Stage 4 analysis. Distribution: Semgrep Registry + GitHub. Zero infrastructure to operate. Author is one person (Ifuensan), contributor (not founder) of `loupe` (an LLM-driven security scanner by tnull; not Spiral as originally mis-attributed in the adversarial research). Currently in exploration mode, commit-or-close decision pending 2026-06-01.
+Open-source Semgrep rule pack covering protocol-conformance failure modes for the Bitcoin / Lightning / Cashu / Nostr ecosystem (BIPs, BOLTs, NIPs, NUTs, LUDs). Companion MCP server is dropped from alpha scope; if revisited at v2 it would be a **rule registry** (not a spec knowledge base — that gap is fully covered by `bkb-mcp` for BIP/BOLT/NUT/LUD/bLIP and `@nostrbook/mcp` for NIP/kinds/tags, both already mature and registered in this dev environment). Distribution: Semgrep Registry + GitHub. Zero infrastructure to operate. Author is one person (Ifuensan), contributor (not founder) of `loupe` (an LLM-driven security scanner by tnull; not Spiral as originally mis-attributed in the adversarial research). Currently in exploration mode, commit-or-close decision deferred to post-And-Other-Stuff (~2026-05-28).
 
 ## Customer / problem / stakes / solution
 
@@ -69,11 +69,12 @@ Open-source Semgrep rule pack covering protocol-conformance failure modes for th
 
 ## Decision pending (the gating one)
 
-- **2-week project cooldown 2026-05-17 → 2026-06-01.** No work, no thinking-about-work.
-- Cooldown test outcome at 2026-06-01:
-  - Project pulled at / missed → **commit alpha** (90-day plan: 2026-06-01 to 2026-08-30).
-  - Project forgotten / felt like relief → **close** (archive repo + retrospective + standalone NIP-44 rule survives as OSS contribution).
-  - Genuinely ambiguous → extend cooldown 2 more weeks (one-time only; second ambiguity = closure by default).
+- **Original I10 mechanism (2-week cooldown 2026-05-17 → 2026-06-01) cancelled 2026-05-18** in favor of adversarial validation at **And Other Stuff** conference (~2026-05-28). The substitution upgrade: face-to-face signal from the exact PRFAQ audience replaces the isolated motivation test.
+- AOS outcome triggers:
+  - **Commit alpha** if maintainer signal reinforces thesis + ≥1 firm CODEOWNERS commitment from Q5 launch blocker (see `aos-hypothesis-register.md` for verdict criteria). 90-day plan starts post-conference.
+  - **Pivot** if a different framing surfaces consistently (anti-censorship, MCP rule-registry from day one, language coverage shift, etc.).
+  - **Close** if maintainer reactions cluster around indifference + no audience adoption signal. Archive repo + retrospective + standalone NIP-44 rule survives as OSS contribution.
+- The "ambiguous twice = closure" rule from original I10 still applies if AOS signal is unclear.
 
 ## Positioning (locked decisions)
 
@@ -99,7 +100,7 @@ Open-source Semgrep rule pack covering protocol-conformance failure modes for th
 ## Outstanding launch-blocking work (must close before alpha publicization)
 
 1. **Identify 2-3 named ecosystem reviewers** (one Lightning, one Nostr, one Cashu) and onboard as CODEOWNERS for rule subdirectories. (Q5 launch blocker.)
-2. **Write rule #2** (Cashu NUT-13 keyset-ID derivation flaw) with smoke test against `cdk` and Nutshell.
+2. **Verify spec anchor for rule #2** (NUT-13 vs NUT-02 vs intersection) via `bkb_lookup_nut(2)` + `bkb_get_references("NUT-13")` + re-reading the original conduition.io blog, THEN write the rule with smoke test against `cdk` and Nutshell. Do not implement before anchor verification.
 3. **Write rule #3** (MuSig2 PSBT nonce/pubkey validation) with smoke test against `bitcoin-core`.
 4. **Convert brainstorming MD to navigable roadmap** (GitHub project board or structured issues).
 5. **Obtain real alpha-tester quote** to replace press release placeholder (the press release explicitly states it should not ship without one).
@@ -130,7 +131,7 @@ Open-source Semgrep rule pack covering protocol-conformance failure modes for th
 - TAM is brutal (low hundreds); if author's aspiration is larger than that, friction is built-in.
 - "Community-driven" aspirational framing is detectable if scrutinized; accepted credibility risk.
 - Adoption conversion (from "installs in 60s" to "team adds to CI") has no concrete plan beyond outreach.
-- I10 cooldown could produce "ambiguous" indefinitely; the documented "ambiguous twice = closure" rule must be honored when the moment comes.
+- AOS verdict could produce "ambiguous" indefinitely; the documented "ambiguous twice = closure" rule (inherited from original I10) must be honored when the moment comes.
 - I3 outreach is the work the author has not done. Until real maintainers respond, the customer story is theory.
 
 ## Sources of authority for this distillate

@@ -87,7 +87,7 @@ btc-sec-toolkit closes that gap by encoding ecosystem-specific failure modes as 
 ### How to Participate
 
 - Run the rules: `pip install semgrep && semgrep --config p/btc-sec-toolkit your-code/`
-- Read the roadmap and failure-modes catalog at `github.com/<owner>/btc-sec-toolkit` (200+ candidate rules grouped by spec)
+- Read the roadmap and failure-modes catalog at `github.com/ifuensan/btc-sec-toolkit` (200+ candidate rules grouped by spec)
 - Claim a rule, ship a PR, or open issues for new bug patterns
 - MCP server: watch the repo; access opens when the alpha scope lands
 - License: MIT OR Apache-2.0
@@ -267,6 +267,8 @@ Honest most-likely outcome at 6 months: "mild traction, hard maintenance" — ne
 
 A: **User-confirmed decision: 2-week project cooldown ending 2026-06-01.**
 
+> ⚠️ **Superseded 2026-05-18 — see [Updates appendix](#updates-since-closure-2026-05-17--present).** The cooldown was cancelled in favor of adversarial validation at the **And Other Stuff** conference (~2026-05-28). The original mechanic below is preserved as historical record but no longer reflects the operational plan.
+
 Mechanic: from 2026-05-17 to 2026-06-01, the author blocks all work on btc-sec-toolkit. At the end of the window, the test:
 - If the project has been on the author's mind, missed, or pulled at — **commit to alpha** (90-day plan starts 2026-06-01, alpha target 2026-08-30).
 - If the project has been forgotten or felt like relief from — **close the project**. Archive repo with the smoke-tested NIP-44 rule as a standalone OSS artifact + a retrospective README.
@@ -331,7 +333,7 @@ Honest framing of the test: this is the canonical "miss it or forget it" check f
 
 ## Cracks in the foundation — genuine risks and unresolved contradictions
 
-10. **I10 decision deferred to 2026-06-01 cooldown.** Defensible (motivation test is real) but the risk is that cooldown produces "ambiguous" and gets extended indefinitely. **Mitigation already in I10:** ambiguous twice = closure by default. That rule must apply, not be negotiated when the moment comes.
+10. **I10 decision deferred to 2026-06-01 cooldown.** _[Update 2026-05-18: deferral target moved to post-And-Other-Stuff (~2026-05-28); cooldown cancelled. See [Updates appendix](#updates-since-closure-2026-05-17--present).]_ Defensible (motivation test is real) but the risk is that cooldown produces "ambiguous" and gets extended indefinitely. **Mitigation already in I10:** ambiguous twice = closure by default. That rule must apply, not be negotiated when the moment comes.
 11. **TAM is brutal.** Low hundreds of devs globally (serious Lightning + Nostr + Cashu maintainers combined). If alpha succeeds, the upside is "respected niche contribution," not "successful product." If the author's unconscious aspiration is larger than TAM allows, friction is built in that the PRFAQ does not resolve.
 12. **"Community-driven" framing is aspirational.** Accepted risk per user. But a technical journalist or attentive reviewer can detect the gap between community framing and solo-author reality at any time post-launch. Credibility hit not recoverable.
 13. **Adoption conversion.** Press release says "installs in 60 seconds, runs alongside cargo-audit." OK. The real conversion is "team decides to add to CI" — that requires internal advocacy at each target project. No concrete plan beyond generic outreach.
@@ -367,6 +369,57 @@ Both outcomes are **wins** of the process, not failures.
 - A closure retrospective (why exploration ended, what was learned, what survives as OSS artifact).
 
 **No more iteration recommended.** Further stress-testing without new data (i.e., without real maintainer responses or post-cooldown decision) is procrastination dressed as rigor.
+
+---
+
+## Updates since closure (2026-05-17 → present)
+
+The PRFAQ above is a snapshot of the thinking that closed Stage 5 on 2026-05-17. The sections below capture strategic changes that materialized after closure. The original PRFAQ is preserved as a historical record; this appendix is the delta.
+
+### 2026-05-18 — Cooldown cancelled by external forcing function
+
+I10 originally specified a 2-week cooldown ending 2026-06-01 as the commit/close test. That cooldown was cancelled on 2026-05-18 due to attendance at **And Other Stuff** (Nostr-centric conference, ~2026-05-28). The new test replaces the isolated motivation check with adversarial validation face-to-face with the exact PRFAQ audience.
+
+The decision criterion remains the same (commit / pivot / close). The mechanism shifts: instead of asking "did I miss the project?" the question becomes "did the maintainers I talked to invalidate the thesis, reinforce it, or surface a pivot I hadn't considered?" The "ambiguous twice = closure" rule from I10 still applies if the conference signal is unclear.
+
+Implication for the Verdict: crack #10 ("I10 decision deferred to 2026-06-01 cooldown") is partially superseded — the deferral target moves to post-conference (~2026-05-28). The other 4 cracks (TAM, community-driven framing, adoption conversion, MCP scope) remain unchanged.
+
+The framing of the conference attendance is explicitly **adversarial-listening mode**, not selling. Prep artifacts (interview guide, hypothesis register, people-to-find, cheatsheet) live privately under `_bmad-output/planning-artifacts/`.
+
+### 2026-05-19 — Loupe attribution correction (recap)
+
+The Stage 1 coaching notes already document the inline correction (see the bracketed note in the Stage 1 findings): the original adversarial research mis-attributed Loupe to Block/Spiral; canonical repository is `github.com/tnull/loupe`. The correction is recapped here for completeness because all later sections (Customer FAQ Q1, Internal FAQ I3, Verdict #3) reference Loupe in their positioning analysis.
+
+None of those analyses change in substance — the competitive elephant is still Loupe — but the institutional weight assumed ("Spiral backing") does not exist. Tnull's dual position as Loupe + bkb-mcp maintainer actually *strengthens* the 6-month pattern absorption risk noted in Internal FAQ I9 and Verdict crack #14: tnull has natural architectural position to integrate Bitcoin-specific context directly into Loupe via bkb-mcp.
+
+### 2026-05-18 — Spec retrieval fully covered by two external MCPs
+
+Customer FAQ Q9 framed the project's own MCP server as offering three differentials over raw grep: rule cross-reference, related-clause linking, and structured AI output. Post-Q9, two existing MCP servers were tested and registered as Claude Code tools:
+
+- **`bkb-mcp`** (by tnull) covers BIPs, BOLTs, NUTs, LUDs, bLIPs.
+- **`@nostrbook/mcp`** (by Soapbox Technology) covers NIPs, kinds, tags, protocol docs.
+
+Together they cover Q9's "structured spec lookup" differential completely. The architectural implication: a future btc-sec-toolkit MCP (if built v2) should NOT be a spec knowledge base (already solved) — it should be a **rule registry** exposing failure-mode metadata, smoke results, and suppression playbooks as tools an AI assistant can combine with the two spec MCPs. This reduces the MCP scope from ~60-120 hours (Internal FAQ I7 estimate) to ~20-40 hours.
+
+The 3-month post-alpha MCP evaluation gate (Q9 status: explicit risk) still applies, but the kill criterion shifts: instead of "does MCP justify itself in isolation," it becomes "does the rule pack show enough traction to justify a rule-registry MCP on top?"
+
+### 2026-05-17 — NUT-13 vs NUT-02 anchor verification pending for rule #2
+
+The Press Release and Internal FAQ I6 commit to "Cashu NUT-13 keyset-ID derivation flaw" as alpha rule #2. A first lookup against `bkb-mcp` returned the NUT-13 spec body, which describes **Deterministic Secrets** (deriving `secret` and `r` from a BIP-39 seed via HMAC-SHA256), not keyset-ID derivation. Keyset-ID derivation belongs more directly to **NUT-02 (Keysets and keyset_id)**.
+
+The conduition.io disclosure may anchor to: (a) NUT-02 (mis-labeled in the adversarial research that surfaced the bug); (b) NUT-13 where secret derivation consumes `keyset_id_bytes` in the HMAC input; or (c) an intersection across NUT-02 / NUT-12 / NUT-13.
+
+Action committed before implementing rule #2: re-verify the spec anchor via `bkb_lookup_nut(2)` + `bkb_get_references("NUT-13")` + re-reading the original conduition.io blog post. Implementation against "NUT-13" is paused until confirmation.
+
+The bug class itself is real and verified (Minibits, Cashu.me, Nutstash were affected). The fix only addresses *which spec section the rule cites and pattern-matches against*. No change to the alpha 3-rule scope.
+
+### Working state summary (as of 2026-05-20)
+
+- I10 verdict deferred to **post-And-Other-Stuff** (~2026-05-28), not 2026-06-01.
+- AOS prep artifacts (interview guide, hypothesis register, people-to-find, cheatsheet) ship privately under `_bmad-output/planning-artifacts/` (gitignored).
+- Repo is public at `github.com/ifuensan/btc-sec-toolkit` with the NIP-44 rule shipped (commit `dad89ba`, rule-id refinement commit `1e114d0`).
+- Launch blocker (Q5: 2-3 named CODEOWNERS reviewers) is unresolved; AOS outreach is the primary mechanism for closing it.
+- All previous decisions in the PRFAQ above stand unless explicitly contradicted by this appendix.
 
 ---
 
