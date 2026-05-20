@@ -7,7 +7,7 @@
 An OSS toolkit for security analysis of code in the **Bitcoin / Lightning / Cashu / Nostr** ecosystem. Two artifacts, one story:
 
 1. **Detection rules pack** (Semgrep-format) covering protocol-specific failure modes: BIP / BOLT / LUD / NUT / NIP patterns, HTLC / PTLC lifecycle bugs, transaction construction pitfalls, LNURL/Nostr handler vulnerabilities, etc.
-2. **MCP server** that exposes the rules + contextual explanation to LLM agents (Claude Code, Cursor, Continue, any MCP-aware tool). Calls out to `bkb-mcp` / `bitcoinknowledge.dev` for spec lookup — does NOT build its own knowledge layer.
+2. **MCP server** (deferred to v2 post-alpha) that would expose the rules + smoke results + suppression metadata as a queryable rule registry. Spec lookup is delegated to [`bkb-mcp`](https://docs.rs/crate/bkb-mcp) (BIP/BOLT/NUT/LUD/bLIP) and [`@nostrbook/mcp`](https://nostrbook.dev/mcp) (NIP/kinds/tags), both already mature — this project does NOT build its own knowledge layer.
 
 Distribution: Semgrep Registry, crates.io, MCP server registries. Zero infrastructure to operate.
 
@@ -37,18 +37,20 @@ Value vs. generic-LLM alternatives (including self-hosted loupe):
 
 ## Origin context
 
-Came from analyzing [loupe](https://github.com/<owner>/loupe), a FOSS Rust LLM-driven security scanner. Loupe has only **generic CWE-style prompts** (`DISCOVERY` / `VERIFY` in `crates/loupe-worker/src/llm/prompts.rs`) and a single AWS-key regex rule. Bitcoin-awareness in loupe lives entirely in the optional `bkb-mcp` hook (which is a knowledge layer, not detection content). **btc-sec-toolkit fills the gap loupe leaves open.**
+Came from analyzing [loupe](https://github.com/tnull/loupe), a FOSS Rust LLM-driven security scanner by tnull (who also maintains `bkb-mcp`). Loupe has only **generic CWE-style prompts** (`DISCOVERY` / `VERIFY` in `crates/loupe-worker/src/llm/prompts.rs`) and a single AWS-key regex rule. Bitcoin-awareness in loupe lives entirely in the optional `bkb-mcp` hook (which is a knowledge layer, not detection content). **btc-sec-toolkit fills the gap loupe leaves open.**
 
 The project owner (Ifuensan) is a contributor to loupe (added the Gemini backend), not its founder. btc-sec-toolkit is a separate project, not a fork.
 
-## Status (as of 2026-05-16)
+## Status (as of 2026-05-20)
 
-**Exploration / analysis phase.** Not committed to building. Currently running BMad analysis workflows:
+**Exploration phase, alpha scoped, verdict pending post-conference.** See [`docs/prfaq.md`](prfaq.md) and [`docs/prfaq-distillate.md`](prfaq-distillate.md) for the strategic record.
 
-- ✅ Architectural fitness analysis (Winston) — done
-- ✅ Strategic validation (Mary) — done; thesis refined through several pushback rounds
-- ⏳ Next candidate: brainstorm the failure modes catalog to validate substance (`bmad-brainstorming`)
-- ⏳ After: PRFAQ stress-test (`bmad-prfaq`) if catalog has substance
+- ✅ Failure modes catalog: 255 candidates brainstormed, 17 Tier-1 prioritized (catalog local; see PRFAQ for summary).
+- ✅ PRFAQ stress-test: customer + internal FAQs, narrative verdict (Forged / Needs Heat / Cracked), sustainability commitments.
+- ✅ First rule shipped: `nostr.nip-44.missing-version-check` (commit `dad89ba`), smoke-tested against `rust-nostr` and `nostr-tools`.
+- 🟡 Alpha scope: 3 rules total (NIP-44 done, Cashu to-build, MuSig2 PSBT to-build), Rust + TypeScript at launch.
+- 🟡 Launch blocker pending: 2-3 ecosystem peer reviewers (Lightning + Nostr + Cashu) as CODEOWNERS before alpha publicization.
+- ⏳ Validation pending: attending **And Other Stuff** (Nostr conference, ~2026-05-28) in adversarial-listening mode; commit / pivot / close decision deferred to post-conference.
 
 ## Ruled-out branches (do not re-litigate)
 
@@ -57,7 +59,7 @@ The project owner (Ifuensan) is a contributor to loupe (added the Gemini backend
 - **EVM / DeFi vertical** — loupe not equipped, market saturated, culturally misaligned
 - **Bitcoin/Lightning vertical SaaS premium pricing** — TAM too small (~10-20 paying entities globally), grant-funded projects don't buy commercial tooling
 
-See `/home/ifuensan/.claude/projects/-mnt-datos-home-data-Work-myprojects-research-loupe/memory/` for the full analysis history.
+See [`docs/prfaq.md`](prfaq.md) for the strategic record and the ruled-out branches explained in depth (including the Loupe attribution correction from the original adversarial research).
 
 ## Conventions
 
